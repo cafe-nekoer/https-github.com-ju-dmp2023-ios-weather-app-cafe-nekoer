@@ -7,11 +7,14 @@
 
 import Foundation
 import CoreLocation
-//import Observation
+import Observation
 
-class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
+@Observable
+class LocationManager: NSObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
+    private let geocoder = CLGeocoder()
     var location: CLLocation?
+    var address: CLPlacemark?
     
     
     override init() {
@@ -28,6 +31,13 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
         }
     }
     
+    func reverseGeocodeLocation(_ location: CLLocation){
+        Task {
+            let placemarks = try? await geocoder.reverseGeocodeLocation(location)
+            address = placemarks?.last
+        }
+    }
+    
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         if locationManager.authorizationStatus != .denied {
             locationManager.requestLocation()
@@ -36,6 +46,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
 
         func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
             location = locations.last
+            if let location {
+                reverseGeocodeLocation(location)
+            }
         }
 
         func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

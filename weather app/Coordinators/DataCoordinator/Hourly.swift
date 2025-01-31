@@ -26,4 +26,26 @@ struct Hourly: Decodable {
     let windSpeed80m: [Double] // 80米高度风速列表 (km/h)
     let windSpeed120m: [Double] // 120米高度风速列表 (km/h)
     let windSpeed180m: [Double] // 180米高度风速列表 (km/h)
+    
+    enum CodingKeys: String, CodingKey {
+        case time
+        case temperature2m = "temperature_2m"
+        case relativeHumidity2m = "relative_humidity_2m"
+        case apparentTemperature = "apparent_temperature"
+        case rain
+        case showers
+        case snowfall
+        case snowDepth = "snow_depth"
+        case weatherCode = "weather_code"
+        case cloudCover = "cloud_cover"
+        case cloudCoverLow = "cloud_cover_low"
+        case cloudCoverMid = "cloud_cover_mid"
+        case cloudCoverHigh = "cloud_cover_high"
+        case visibility
+        case windSpeed10m = "wind_speed_10m"
+        case windSpeed80m = "wind_speed_80m"
+        case windSpeed120m = "wind_speed_120m"
+        case windSpeed180m = "wind_speed_180m"
+         
+    }
 }
